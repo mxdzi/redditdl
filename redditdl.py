@@ -1,6 +1,6 @@
-import os
 import sys
 from datetime import datetime, date, timedelta
+from pathlib import Path
 
 import requests
 
@@ -9,7 +9,8 @@ def download(subreddit):
     session = requests.Session()
     session.headers.update({'User-Agent': 'reddit-dl'})
     after = None
-    os.makedirs('download\\' + subreddit, exist_ok=True)
+    download_path = Path.cwd().joinpath('download', subreddit)
+    download_path.mkdir(parents=True, exist_ok=True)
     while True:
         payload = {'after': after, 'limit': 100}
         result = session.get('http://www.reddit.com/r/' + subreddit + '/new.json', params=payload).json()
@@ -24,7 +25,7 @@ def download(subreddit):
                             permalink = post['data']['permalink'].split('/')
                             filename = permalink[-2] + "#" + permalink[-3]
                             fileext = "." + post['data']['url'].split('.')[-1].replace('?', '')
-                            with open('download\\' + subreddit + "\\" + filename + fileext, 'wb') as file:
+                            with open(download_path.joinpath(filename + fileext), 'wb') as file:
                                 file.write(result.content)
                     else:
                         print(subreddit, post['data']['url'], datetime.fromtimestamp(post['data']['created_utc']))
