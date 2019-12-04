@@ -17,7 +17,7 @@ def download(subreddit):
         after = result['data']['after']
         print(subreddit, len(result['data']['children']))
         for post in result['data']['children']:
-            if date.today() + timedelta(days=-2) < date.fromtimestamp(post['data']['created_utc']) < date.today():
+            if date.today() + timedelta(days=-2) < date.fromtimestamp(post['data']['created']) < date.today():
                 if 'post_hint' in post['data']:
                     if post['data']['post_hint'] == 'image':
                         result = session.get(post['data']['url'])
@@ -28,15 +28,13 @@ def download(subreddit):
                             with open(download_path.joinpath(filename + fileext), 'wb') as file:
                                 file.write(result.content)
                     else:
-                        print(subreddit, post['data']['url'], datetime.fromtimestamp(post['data']['created_utc']))
+                        print(subreddit, post['data']['url'], datetime.fromtimestamp(post['data']['created']))
             elif date.fromtimestamp(post['data']['created_utc']) < date.today() + timedelta(days=-2):
                 break
         else:
             if after is None:
                 break
-            continue
         break
-    pass
 
 
 if __name__ == "__main__":
