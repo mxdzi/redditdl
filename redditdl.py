@@ -22,11 +22,7 @@ def download(subreddit):
                     if post['data']['post_hint'] == 'image':
                         result = session.get(post['data']['url'])
                         if result.status_code == 200:
-                            permalink = post['data']['permalink'].split('/')
-                            filename = permalink[-2] + "#" + permalink[-3]
-                            fileext = "." + post['data']['url'].split('.')[-1].replace('?', '')
-                            with open(download_path.joinpath(filename + fileext), 'wb') as file:
-                                file.write(result.content)
+                            download_image(post, download_path, result)
                     else:
                         print(subreddit, post['data']['url'], datetime.fromtimestamp(post['data']['created']))
             elif date.fromtimestamp(post['data']['created_utc']) < date.today() + timedelta(days=-2):
@@ -35,6 +31,14 @@ def download(subreddit):
             if after is None:
                 break
         break
+
+
+def download_image(post, download_path, result):
+    permalink = post['data']['permalink'].split('/')
+    filename = permalink[-2] + "#" + permalink[-3]
+    fileext = "." + post['data']['url'].split('.')[-1].replace('?', '')
+    with open(download_path.joinpath(filename + fileext), 'wb') as file:
+        file.write(result.content)
 
 
 if __name__ == "__main__":
