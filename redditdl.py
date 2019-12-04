@@ -18,14 +18,13 @@ def download(subreddit):
         print(subreddit, len(result['data']['children']))
         for post in result['data']['children']:
             if date.today() + timedelta(days=-2) < date.fromtimestamp(post['data']['created']) < date.today():
-                if 'post_hint' in post['data']:
-                    if post['data']['post_hint'] == 'image':
-                        result = session.get(post['data']['url'])
-                        if result.status_code == 200:
-                            download_image(post, download_path, result)
-                    else:
-                        print(subreddit, post['data']['url'], datetime.fromtimestamp(post['data']['created']))
-            elif date.fromtimestamp(post['data']['created_utc']) < date.today() + timedelta(days=-2):
+                if 'post_hint' in post['data'] and post['data']['post_hint'] == 'image':
+                    result = session.get(post['data']['url'])
+                    if result.status_code == 200:
+                        download_image(post, download_path, result)
+                else:
+                    print(subreddit, post['data']['url'], datetime.fromtimestamp(post['data']['created']))
+            elif date.fromtimestamp(post['data']['created']) < date.today() + timedelta(days=-2):
                 break
         else:
             if after is None:
