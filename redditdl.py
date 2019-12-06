@@ -20,9 +20,10 @@ class Redditdl:
 
     def _get_posts(self):
         after = None
+        url = f"https://www.reddit.com/r/{self.subreddit}/new.json"
         while True:
             payload = {'after': after, 'limit': 100}
-            result = self.session.get('http://www.reddit.com/r/' + self.subreddit + '/new.json', params=payload).json()
+            result = self.session.get(url, params=payload).json()
             after = result['data']['after']
             print(self.subreddit, len(result['data']['children']))
             for post in result['data']['children']:
@@ -48,7 +49,8 @@ class Redditdl:
             if result.status_code == 200:
                 self._save_image(post, download_path, result)
 
-    def _save_image(self, post, download_path, result):
+    @staticmethod
+    def _save_image(post, download_path, result):
         permalink = post['data']['permalink'].split('/')
         filename = permalink[-2] + "#" + permalink[-3]
         fileext = "." + post['data']['url'].split('.')[-1].replace('?', '')
