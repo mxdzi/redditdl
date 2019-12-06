@@ -2,7 +2,7 @@ import datetime
 import json
 from unittest.mock import MagicMock, patch, mock_open
 
-import redditdl
+from redditdl import Redditdl
 
 
 @patch('redditdl.Path.mkdir')
@@ -21,7 +21,8 @@ def test(mock_date, mock_session, mock_path, capsys):
     mock_date.today.return_value = datetime.date(2019, 12, 4)
 
     subreddit = "test"
-    redditdl.download(subreddit)
+    redditdl = Redditdl(subreddit)
+    redditdl.download()
 
     captured = capsys.readouterr()
     output = ("test 4\n"
