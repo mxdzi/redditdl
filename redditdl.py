@@ -15,8 +15,11 @@ class Redditdl:
         self.posts_to_download = []
 
     def download(self):
+        print(f"Downloading from subreddit: {self.subreddit}")
         self._get_posts()
-        self._download_images()
+        if self.posts_to_download:
+            print(f"Images to download: {len(self.posts_to_download)}")
+            self._download_images()
 
     def _get_posts(self):
         after = None
@@ -25,13 +28,13 @@ class Redditdl:
             payload = {'after': after, 'limit': 100}
             result = self.session.get(url, params=payload).json()
             after = result['data']['after']
-            print(self.subreddit, len(result['data']['children']))
+            print(f"Found: {len(result['data']['children'])} posts")
             for post in result['data']['children']:
                 if date.today() + timedelta(days=-2) < date.fromtimestamp(post['data']['created']) < date.today():
                     if 'post_hint' in post['data'] and post['data']['post_hint'] == 'image':
                         self.posts_to_download.append(post)
                     else:
-                        print(self.subreddit, post['data']['url'], datetime.fromtimestamp(post['data']['created']))
+                        print(f"Non image: {datetime.fromtimestamp(post['data']['created'])} {post['data']['url']}")
                 elif date.fromtimestamp(post['data']['created']) < date.today() + timedelta(days=-2):
                     break
             else:
@@ -41,10 +44,9 @@ class Redditdl:
 
     def _download_images(self):
         download_path = Path.cwd().joinpath('download', self.subreddit)
-        if self.posts_to_download:
-            download_path.mkdir(parents=True, exist_ok=True)
-
+        download_path.mkdir(parents=True, exist_ok=True)
         for post in self.posts_to_download:
+            print(f"Downloading image: {datetime.fromtimestamp(post['data']['created'])} {post['data']['url']}")
             result = self.session.get(post['data']['url'])
             if result.status_code == 200:
                 self._save_image(post, download_path, result)
@@ -60,7 +62,6 @@ class Redditdl:
 
 def main(args):  # pragma: no cover
     for subreddit in args.subreddits:
-        print(subreddit)
         redditdl = Redditdl(subreddit)
         redditdl.download()
 

@@ -25,12 +25,19 @@ def test(mock_date, mock_session, mock_path, capsys):
     redditdl.download()
 
     captured = capsys.readouterr()
-    output = ("test 4\n"
-              "test https://i.redd.it/2.jpg 2019-12-03 13:00:00\n")
+    output = ("Downloading from subreddit: test\n"
+              "Found: 4 posts\n"
+              "Non image: 2019-12-03 13:00:00 https://i.redd.it/2.mp4\n"
+              "Images to download: 1\n"
+              "Downloading image: 2019-12-03 13:00:00 https://i.redd.it/3.jpg\n")
     assert mock_path.call_count == 1
     assert captured.out == output
 
-
+# images
+# 1 - too new
+# 2 - non image
+# 3 - ok
+# 4 - too old
 test_response_new = """
 {
     "kind": "Listing",
@@ -54,7 +61,7 @@ test_response_new = """
                 "data": {
                     "created": 1575374400.0,
                     "permalink": "/r/test/comments/bbb/title-2/",
-                    "url": "https://i.redd.it/2.jpg"
+                    "url": "https://i.redd.it/2.mp4"
                 }
             },
             {
