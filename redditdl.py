@@ -4,6 +4,8 @@ from pathlib import Path
 
 import requests
 
+version = 1.0
+
 
 def download(subreddit):
     session = requests.Session()
