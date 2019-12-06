@@ -32,13 +32,15 @@ class Redditdl:
             if self.verbose:
                 print(f"Found: {len(result['data']['children'])} posts")
             for post in result['data']['children']:
-                if date.today() + timedelta(days=-2) < date.fromtimestamp(post['data']['created']) < date.today():
-                    if 'post_hint' in post['data'] and post['data']['post_hint'] == 'image':
+                post_date = date.fromtimestamp(post['data']['created'])
+                date_past = date.today() + timedelta(days=-2)
+                if date_past < post_date < date.today():
+                    if post['data'].get('post_hint') == 'image':
                         self.posts_to_download.append(post)
                     else:
                         if self.verbose:
                             print(f"Non image: {datetime.fromtimestamp(post['data']['created'])} {post['data']['url']}")
-                elif date.fromtimestamp(post['data']['created']) < date.today() + timedelta(days=-2):
+                elif post_date < date_past:
                     return
             if after is None:
                 return
