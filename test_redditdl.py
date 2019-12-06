@@ -21,7 +21,8 @@ def test(mock_date, mock_session, mock_path, capsys):
     mock_date.today.return_value = datetime.date(2019, 12, 4)
 
     subreddit = "test"
-    redditdl = Redditdl(subreddit)
+    verbose = True
+    redditdl = Redditdl(subreddit, verbose)
     redditdl.download()
 
     captured = capsys.readouterr()
