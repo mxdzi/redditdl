@@ -1,10 +1,10 @@
-import sys
+import argparse
 from datetime import datetime, date, timedelta
 from pathlib import Path
 
 import requests
 
-version = 1.0
+version = 1.1
 
 
 def download(subreddit):
@@ -42,9 +42,15 @@ def download_image(post, download_path, result):
         file.write(result.content)
 
 
+def main(args):
+    for subreddit in args.subreddits:
+        print(subreddit)
+        download(subreddit)
+
+
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        reddits = sys.argv[1].split(',')
-        for reddit in reddits:
-            print(reddit)
-            download(reddit)
+    parser = argparse.ArgumentParser(prog="Reddit Downloader")
+    parser.add_argument('subreddits', metavar='subreddit', nargs='+', help='Names of subreddits to download')
+    parser.add_argument('--version', '-V', action='version', version=f"%(prog)s {version}")
+    args = parser.parse_args()
+    main(args)
