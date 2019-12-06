@@ -36,11 +36,9 @@ class Redditdl:
                     else:
                         print(f"Non image: {datetime.fromtimestamp(post['data']['created'])} {post['data']['url']}")
                 elif date.fromtimestamp(post['data']['created']) < date.today() + timedelta(days=-2):
-                    break
-            else:
-                if after is None:
-                    break
-            break
+                    return
+            if after is None:
+                return
 
     def _download_images(self):
         download_path = Path.cwd().joinpath('download', self.subreddit)
