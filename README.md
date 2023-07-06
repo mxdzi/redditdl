@@ -1,13 +1,13 @@
 # redditdl
 
-A simple Python script for downloading the images from reddit.com.
+A simple Python script for downloading images from reddit.com.
 
 ## How to use
 
-Images are saved in folder named after subreddit inside `downloads` folder.
-By default a subreddit is sorted by new and images from yesterday are downloaded.
+Images are saved in a folder named after the subreddit inside the `downloads` folder.
+By default, a subreddit is sorted by new, and images from yesterday are downloaded.
 
-To download all images from subreddit pass subreddit name as first argument:
+To download all images from a subreddit, pass the subreddit name as the first argument.:
 
     redditdl.py xxx
 
