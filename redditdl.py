@@ -1,3 +1,4 @@
+#!/usr/bin/env python3.11
 import argparse
 from datetime import datetime, date, timedelta
 from pathlib import Path
