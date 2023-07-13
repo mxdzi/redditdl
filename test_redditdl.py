@@ -54,7 +54,8 @@ test_response_new = """
                     "post_hint": "image",
                     "created": 1575460800.0,
                     "permalink": "/r/test/comments/aaa/title-1/",
-                    "url": "https://i.redd.it/1.jpg"
+                    "url": "https://i.redd.it/1.jpg",
+                    "author": "user1"
                 }
             },
             {
@@ -71,7 +72,8 @@ test_response_new = """
                     "post_hint": "image",
                     "created": 1575374400.0,
                     "permalink": "/r/test/comments/ccc/title-3/",
-                    "url": "https://i.redd.it/3.jpg"
+                    "url": "https://i.redd.it/3.jpg",
+                    "author": "user3"
                 }
             },
             {
@@ -80,7 +82,8 @@ test_response_new = """
                     "post_hint": "image",
                     "created": 1575201600.0,
                     "permalink": "/r/test/comments/ddd/title-4/",
-                    "url": "https://i.redd.it/4.jpg"
+                    "url": "https://i.redd.it/4.jpg",
+                    "author": "user4"
                 }
             }
          ],

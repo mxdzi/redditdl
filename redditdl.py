@@ -5,7 +5,7 @@ from pathlib import Path
 
 import requests
 
-version = 1.2
+version = 1.3
 
 
 class Redditdl:
@@ -61,7 +61,8 @@ class Redditdl:
         permalink = post['data']['permalink'].split('/')
         filename = permalink[-2] + "#" + permalink[-3]
         fileext = "." + post['data']['url'].split('.')[-1].replace('?', '')
-        with open(download_path.joinpath(filename + fileext), 'wb') as file:
+        author = post['data']['author']
+        with open(download_path.joinpath(f"{filename}@{author}{fileext}"), 'wb') as file:
             file.write(result.content)
 
 
