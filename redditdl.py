@@ -5,7 +5,9 @@ from pathlib import Path
 
 import requests
 
-version = 1.3
+version = 1.4
+
+USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0'
 
 
 class Redditdl:
@@ -13,7 +15,7 @@ class Redditdl:
         self.subreddit = subreddit
         self.verbose = verbose
         self.session = requests.Session()
-        self.session.headers.update({'User-Agent': 'reddit-dl'})
+        self.session.headers.update({'User-Agent': USER_AGENT})
         self.posts_to_download = []
 
     def download(self):
