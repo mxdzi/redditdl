@@ -19,6 +19,10 @@ To show progress use `-v` flag:
 
     redditdl.py xxx -v
 
+To download all images use `-a` flag:
+
+    redditdl.py xxx -a
+
 ## Tests
 
 Run tests with:
