@@ -5,7 +5,7 @@ from pathlib import Path
 
 import requests
 
-version = 1.4
+version = 1.5
 
 USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0'
 
@@ -52,19 +52,29 @@ class Redditdl:
         download_path = Path.cwd().joinpath('download', self.subreddit)
         download_path.mkdir(parents=True, exist_ok=True)
         for post in self.posts_to_download:
+            image_download_path = self._get_image_download_path(post, download_path)
+            image_url = f"{datetime.fromtimestamp(post['data']['created'])} {post['data']['url']}"
+            if image_download_path.is_file():
+                if self.verbose:
+                    print(f"Image: {image_url} exists, skipping download.")
+                continue
             if self.verbose:
-                print(f"Downloading image: {datetime.fromtimestamp(post['data']['created'])} {post['data']['url']}")
+                print(f"Downloading image: {image_url}")
             result = self.session.get(post['data']['url'])
             if result.status_code == 200:
-                self._save_image(post, download_path, result)
+                self._save_image(image_download_path, result)
 
     @staticmethod
-    def _save_image(post, download_path, result):
+    def _get_image_download_path(post, download_path):
         permalink = post['data']['permalink'].split('/')
         filename = permalink[-2] + "#" + permalink[-3]
         fileext = "." + post['data']['url'].split('.')[-1].replace('?', '')
         author = post['data']['author']
-        with open(download_path.joinpath(f"{filename}@{author}{fileext}"), 'wb') as file:
+        return download_path.joinpath(f"{filename}@{author}{fileext}")
+
+    @staticmethod
+    def _save_image(image_download_path, result):
+        with open(image_download_path, 'wb') as file:
             file.write(result.content)
 
 
