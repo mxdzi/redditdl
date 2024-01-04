@@ -5,14 +5,15 @@ from pathlib import Path
 
 import requests
 
-version = 1.5
+version = 1.6
 
 USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0'
 
 
 class Redditdl:
-    def __init__(self, subreddit, verbose=False):
+    def __init__(self, subreddit, all_images=False, verbose=False):
         self.subreddit = subreddit
+        self.all_images = all_images
         self.verbose = verbose
         self.session = requests.Session()
         self.session.headers.update({'User-Agent': USER_AGENT})
@@ -35,18 +36,24 @@ class Redditdl:
             if self.verbose:
                 print(f"Found: {len(result['data']['children'])} posts")
             for post in result['data']['children']:
-                post_date = date.fromtimestamp(post['data']['created'])
-                date_past = date.today() + timedelta(days=-2)
-                if date_past < post_date < date.today():
-                    if post['data'].get('post_hint') == 'image':
-                        self.posts_to_download.append(post)
-                    else:
-                        if self.verbose:
-                            print(f"Non image: {datetime.fromtimestamp(post['data']['created'])} {post['data']['url']}")
-                elif post_date < date_past:
-                    return
+                if self.all_images:
+                    self._add_post_to_download_list(post)
+                else:
+                    post_date = date.fromtimestamp(post['data']['created'])
+                    date_past = date.today() + timedelta(days=-2)
+                    if date_past < post_date < date.today():
+                        self._add_post_to_download_list(post)
+                    elif post_date < date_past:
+                        return
             if after is None:
                 return
+
+    def _add_post_to_download_list(self, post):
+        if post['data'].get('post_hint') == 'image':
+            self.posts_to_download.append(post)
+        else:
+            if self.verbose:
+                print(f"Non image: {datetime.fromtimestamp(post['data']['created'])} {post['data']['url']}")
 
     def _download_images(self):
         download_path = Path.cwd().joinpath('download', self.subreddit)
@@ -80,13 +87,14 @@ class Redditdl:
 
 def main(args):  # pragma: no cover
     for subreddit in args.subreddits:
-        redditdl = Redditdl(subreddit, args.verbose)
+        redditdl = Redditdl(subreddit, args.all, args.verbose)
         redditdl.download()
 
 
 if __name__ == "__main__":  # pragma: no cover
     parser = argparse.ArgumentParser(prog="Reddit Downloader")
     parser.add_argument('subreddits', metavar='subreddit', nargs='+', help='Names of subreddits to download')
+    parser.add_argument('--all', '-a', action="store_true", help="Download all images")
     parser.add_argument('--verbose', '-v', action="store_true", help="Show more info when downloading")
     parser.add_argument('--version', '-V', action='version', version=f"%(prog)s {version}")
     args = parser.parse_args()

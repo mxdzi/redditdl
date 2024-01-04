@@ -22,7 +22,7 @@ def test(mock_date, mock_session, mock_path, capsys):
 
     subreddit = "test"
     verbose = True
-    redditdl = Redditdl(subreddit, verbose)
+    redditdl = Redditdl(subreddit, verbose=verbose)
     redditdl.download()
 
     captured = capsys.readouterr()
