@@ -7,6 +7,9 @@ license = "MIT"
 readme = "README.md"
 packages = [{include = "redditdl.py", from = "src"}]
 
+[tool.poetry.scripts]
+redditdl = 'redditdl:main'
+
 [tool.poetry.dependencies]
 python = "^3.11"
 requests = "2.31.0"

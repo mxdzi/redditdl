@@ -85,17 +85,18 @@ class Redditdl:
             file.write(result.content)
 
 
-def main(args):  # pragma: no cover
-    for subreddit in args.subreddits:
-        redditdl = Redditdl(subreddit, args.all, args.verbose)
-        redditdl.download()
-
-
-if __name__ == "__main__":  # pragma: no cover
+def main():  # pragma: no cover
     parser = argparse.ArgumentParser(prog="Reddit Downloader")
     parser.add_argument('subreddits', metavar='subreddit', nargs='+', help='Names of subreddits to download')
     parser.add_argument('--all', '-a', action="store_true", help="Download all images")
     parser.add_argument('--verbose', '-v', action="store_true", help="Show more info when downloading")
     parser.add_argument('--version', '-V', action='version', version=f"%(prog)s {version}")
     args = parser.parse_args()
-    main(args)
+
+    for subreddit in args.subreddits:
+        redditdl = Redditdl(subreddit, args.all, args.verbose)
+        redditdl.download()
+
+
+if __name__ == "__main__":  # pragma: no cover
+    main()
