@@ -2,6 +2,10 @@
 
 A simple Python script for downloading images from reddit.com.
 
+## How to install
+
+Run `poetry install`
+
 ## How to use
 
 Images are saved in a folder named after the subreddit inside the `downloads` folder.
@@ -27,4 +31,4 @@ To download all images use `-a` flag:
 
 Run tests with:
 
-    pytest --cov=redditdl --cov-report html
+    poetry run pytest --cov=redditdl --cov-report html
