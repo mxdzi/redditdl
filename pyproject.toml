@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "reddit-img-dl"
+version = "1.6.0"
+description = "A simple Python script for downloading images from reddit.com."
+authors = ["Michał Dziadowicz <michal@dziadowicz.it>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "redditdl.py", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+requests = "2.31.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "7.4.3"
+pytest-cov = "4.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
